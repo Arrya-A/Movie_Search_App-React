@@ -1,7 +1,10 @@
 import './App.css'
+import useFetch from './hooks/useFetch'
 
 function App() {
-
+  const data = useFetch(`https://www.omdbapi.com/?apikey=fa1c9c03&t=roja`)
+  // (`https://www.omdbapi.com/?apikey=fa1c9c03&t=${moviename}`)
+  console.log(data);
   return (
     <>
       <div className='bg-primary'>
