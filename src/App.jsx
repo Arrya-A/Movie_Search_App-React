@@ -1,52 +1,81 @@
-import './App.css'
-import useFetch from './hooks/useFetch'
+import { useState } from 'react';
+import './App.css';
+import useFetch from './hooks/useFetch';
 
 function App() {
-  const data = useFetch(`https://www.omdbapi.com/?apikey=fa1c9c03&t=roja`)
-  // (`https://www.omdbapi.com/?apikey=fa1c9c03&t=${moviename}`)
-  console.log(data);
+  const [movie, setMovie] = useState('');
+  const [searchMovie, setSearchMovie] = useState(''); // New state for the searched movie
+  const [showDetails, setShowDetails] = useState(false);
+
+  const data = useFetch(`https://www.omdbapi.com/?apikey=fa1c9c03&t=${searchMovie}`);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (movie) {
+      // console.log(movie);
+
+      setSearchMovie(movie); //to update search movie
+
+      setShowDetails(true); //to show details only after clicking search
+    }
+  }
+
   return (
     <>
+      {/* header */}
       <div className='bg-primary'>
-        <h1 className='text-center text-light py-3 mb-5'>Movie Search</h1>
+        <h1 className='text-center text-light py-3 mb-5'>Movie Search <span className='fs-2 ms-1'><i className="fa-solid fa-clapperboard"></i></span></h1>
       </div>
 
-      {/* searchbar */}
-      <div className="d-flex justify-content-center">
-        <div className="d-flex w-75">
-          <input type="text" placeholder="Movie Name" className="form-control" id="input" />
-          <button className="btn btn-primary ms-1 px-3"><i className="fa-solid fa-magnifying-glass"></i></button>
-        </div>
-      </div>
 
-      {/* body */}
-      <div className="card mb-3 py-3 mt-5 mx-auto" style={{ width: '70%', backgroundColor: 'whitesmoke' }}>
-        <div className="row g-0">
-          <h3 className='ms-3'>Title</h3>
-          <h6 className='ms-3 '>Year . Language</h6>
-          <div className="col-md-3 p-3 ">
-
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNSOTwZcIfUCGKc-TpN0SlavOLb_fP5NZULw&s" className="img-fluid rounded" alt="..." />
-
-
+      {/* Search bar */}
+      <form onSubmit={handleSubmit}>
+        <div className="d-flex justify-content-center">
+          <div className="d-flex w-75">
+            <input type="text" value={movie} onChange={(e) => setMovie(e.target.value)} placeholder="Movie Name" className="form-control" />
+            <button type='submit' className="btn btn-primary ms-1 px-3">
+              <i className="fa-solid fa-magnifying-glass"></i>
+            </button>
           </div>
-          <div className="col-md-9 ">
-            <div className="card-body">
-              <ul className="list-group list-group-flush border rounded">
-                <li className="list-group-item">Genre :</li>
-                <li className="list-group-item">Director : </li>
-                <li className="list-group-item">Writer :</li>
-                <li className="list-group-item">Stars : </li>
-                <li className="list-group-item">Awards :</li>
-                <li className="list-group-item">IMDB Rating :</li>
-              </ul>
+        </div>
+      </form>
+
+
+      {/*Error Messages */}
+      {data.Response === "False" && showDetails && (
+        <div className="text-center text-danger p-5">
+          <h2 className='fw-bold'>Movie not found</h2>
+        </div>
+      )}
+
+
+      {/* Body */}
+      {showDetails && data && data.Response !== "False" && (
+        <div className="card mb-3 py-3 mt-5 mx-auto" style={{ width: '70%', backgroundColor: 'light-blue' }}>
+          <div className="row g-0">
+            <h3 className='ms-3'>{data.Title}</h3>
+            <h6 className='ms-3'>{data.Year} . {data.Language}</h6>
+            <div className="col-md-3 p-3">
+              <img src={data.Poster} className="img-fluid rounded" alt={data.Title} />
+            </div>
+            <div className="col-md-9">
+              <div className="card-body">
+                <ul className="list-group list-group-flush border rounded">
+                  <li className="list-group-item"><span className='fw-bold'>Genre :</span> {data.Genre}</li>
+                  <li className="list-group-item"><span className='fw-bold'>Director :</span> {data.Director}</li>
+                  <li className="list-group-item"><span className='fw-bold'>Writer :</span> {data.Writer}</li>
+                  <li className="list-group-item"><span className='fw-bold'>Stars :</span> {data.Actors}</li>
+                  <li className="list-group-item"><span className='fw-bold'>Awards :</span> {data.Awards}</li>
+                  <li className="list-group-item"><span className='fw-bold'>IMDB Rating :</span> {data.imdbRating}</li>
+                </ul>
+              </div>
             </div>
           </div>
+          <p className='ms-3'>{data.Plot}</p>
         </div>
-        <p className='ms-3'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus maxime ullam omnis libero itaque maiores cupiditate deleniti debitis iusto aspernatur veniam ex, vero magni veritatis dicta minima autem dolorem nulla?</p>
-      </div>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
