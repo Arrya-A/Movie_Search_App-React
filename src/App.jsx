@@ -24,7 +24,7 @@ function App() {
     <>
       {/* header */}
       <div className='bg-primary'>
-        <h1 className='text-center text-light py-3 mb-5'>Movie Search <span className='fs-2 ms-1'><i className="fa-solid fa-clapperboard"></i></span></h1>
+        <h1 className='text-center text-light py-3 mb-5'>CineSearch <span className='fs-2 ms-1'><i className="fa-solid fa-clapperboard"></i></span></h1>
       </div>
 
 
