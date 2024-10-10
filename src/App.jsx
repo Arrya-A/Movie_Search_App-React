@@ -69,7 +69,7 @@ function App() {
                   <li className="list-group-item"><span className='fw-bold'>IMDB Rating :</span> {data.imdbRating}</li>
                 </ul>
               </div>
-              <p className='ms-3'><span className='fw-bold'>Plot :</span> {data.Plot}</p>
+              <p className='mx-3'><span className='fw-bold'>Plot :</span> {data.Plot}</p>
             </div>
           </div>
           
